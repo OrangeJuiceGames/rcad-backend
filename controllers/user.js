@@ -2,11 +2,12 @@ const User = require('../models/user')
 const setHighScore = (req, res, next) => 
 {
     console.log(req.body.user_id)
-    User.findOne({user_id : req.body.user_id}, (err, data)=>{
+    User.findOne({user_id : req.body.user_key}, (err, data)=>{
         console.log(data)
         if(!data)
         {
             const u = new User({
+                user_key: req.body.user_key,
                 user_id : req.body.user_id,
                 score: req.body.score
             })
@@ -17,7 +18,20 @@ const setHighScore = (req, res, next) =>
             })
         }else{
             if(err) return res.json(`Something went wrong, please try again. ${err}`);
-            return res.json({message:"User has same or higher socre"});
+
+            var respose = "";
+
+            if(data.score >= req.body.score)
+            {
+                respose = "User has same or higher socre";
+            }else
+            {
+                data.score = req.body.score;
+                data.save()
+                respose = "User has beat high score";
+            }
+
+            return res.json({message:respose});
         }
     })
 }
