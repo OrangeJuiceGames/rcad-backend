@@ -2,7 +2,7 @@ const User = require('../models/user')
 const setHighScore = (req, res, next) => 
 {
     console.log(req.body.user_id)
-    User.findOne({user_id : req.body.user_key}, (err, data)=>{
+    User.findOne({user_key : req.body.user_key}, (err, data)=>{
         console.log(data)
         if(!data)
         {
